@@ -3,52 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgroHelper - Aplicativo de Agronomia</title>
+    <title>AgroInfo - Informações sobre Plantas Agrícolas</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .section { margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
-        h2 { color: #2e7d32; margin-top: 0; }
-        .crop-card { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
-        button { background: #2e7d32; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #1b5e20; }
-        input, select { padding: 8px; margin: 5px 0; width: 100%; max-width: 300px; }
-        #results { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #81c784;
+            --light-color: #f1f8e9;
+            --dark-color: #1b5e20;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.2em;
+        }
+        
+        .search-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        #plant-search {
+            padding: 10px;
+            width: 70%;
+            max-width: 500px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        #search-btn {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        
+        #search-btn:hover {
+            background-color: var(--dark-color);
+        }
+        
+        .content-container {
+            display: flex;
+            gap: 30px;
+        }
+        
+        #plant-list {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .plant-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .plant-item:hover {
+            background-color: var(--light-color);
+        }
+        
+        .plant-item h3 {
+            margin: 0 0 5px 0;
+            color: var(--primary-color);
+        }
+        
+        .plant-item p {
+            margin: 0;
+            color: #666;
+        }
+        
+        #plant-details {
+            flex: 2;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .plant-header h2 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .plant-header h3 {
+            color: #666;
+            font-style: italic;
+            margin-top: 0;
+        }
+        
+        .plant-image-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .plant-image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .cultivation-info {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .pests-list {
+            background-color: #ffebee;
+            padding: 15px 15px 15px 35px;
+            border-radius: 8px;
+        }
+        
+        #back-btn {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        
+        #back-btn:hover {
+            background-color: var(--dark-color);
+        }
+        
+        @media (max-width: 768px) {
+            .content-container {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>AgroHelper - Aplicativo de Agronomia</h1>
+    <header>
+        <h1>AgroInfo</h1>
+        <p>Informações detalhadas sobre plantas agrícolas</p>
+    </header>
     
-    <div class="section">
-        <h2>Pesquisar Cultivos</h2>
-        <input type="text" id="crop-search" placeholder="Digite o nome, época ou tipo de solo">
-        <button id="search-btn">Pesquisar</button>
-        <div id="results"></div>
-    </div>
+    <section class="search-section">
+        <input type="text" id="plant-search" placeholder="Pesquise por nome, nome científico ou família...">
+        <button id="search-btn">Buscar</button>
+    </section>
     
-    <div class="section">
-        <h2>Calculadora de Água</h2>
-        <p>Calcule a necessidade hídrica para sua plantação:</p>
-        <select id="crop-select">
-            <!-- Opções serão preenchidas pelo JavaScript -->
-        </select>
-        <input type="number" id="area-input" placeholder="Área em hectares">
-        <button id="calculate-btn">Calcular</button>
-        <p id="water-result"></p>
-    </div>
-    
-    <div class="section">
-        <h2>Previsão Meteorológica</h2>
-        <input type="text" id="location-input" placeholder="Digite sua localização">
-        <button id="weather-btn">Buscar Previsão</button>
-        <div id="weather-result"></div>
-    </div>
-    
-    <div class="section">
-        <h2>Gerenciar Cultivos</h2>
-        <button id="add-crop-btn">Adicionar Novo Cultivo</button>
-        <div id="forms-container"></div>
+    <div class="content-container">
+        <section id="plant-list">
+            <!-- Lista de plantas será renderizada aqui pelo JavaScript -->
+        </section>
+        
+        <section id="plant-details">
+            <!-- Detalhes da planta serão exibidos aqui quando selecionada -->
+        </section>
     </div>
 
-    <script src="agriculture-app.js"></script>
+    <script src="plants-info-app.js"></script>
 </body>
 </html>
